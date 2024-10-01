@@ -1,49 +1,3 @@
-
-# Configure the VPC
-resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
-
-  tags = {
-    Name = "eks-cluster-vpc"
-  }
-}
-
-resource "aws_subnet" "public" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
-
-  tags = {
-    Name = "eks-cluster-public-subnet"
-  }
-}
-
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
-
-  tags = {
-    Name = "eks-cluster-igw"
-  }
-}
-
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
-
-  tags = {
-    Name = "eks-cluster-public-route-table"
-  }
-}
-
-resource "aws_route" "public_route" {
-  route_table_id = aws_route_table.public.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.igw.id
-}
-
-resource "aws_route_table_association" "public_subnet" {
-  subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.public.id
-}
-
 # Create the EKS cluster
 resource "aws_eks_cluster" "main" {
   name = "eks-cluster"
@@ -178,14 +132,3 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy_attachment" {
   role       = aws_iam_role.eks_cluster_role.name
   policy_arn = aws_iam_policy.eks_cluster_policy.arn
 }
-
-# resource "local_exec" "generate_kubeconfig" {
-#   command = "aws eks update-kubeconfig --name \"${aws_eks_cluster.main.name}\" --region \"${aws_eks_cluster.main.region}\" --kubeconfig \"path/to/your/kubeconfig\""
-#   # Execute após a criação do cluster
-#   depends_on = [aws_eks_cluster.main]
-# }
-
-# # Output the cluster endpoint and kubeconfig
-# output "cluster_endpoint" {
-#   value = aws_eks_cluster.main.endpoint
-# }
