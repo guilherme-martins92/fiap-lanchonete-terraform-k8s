@@ -48,7 +48,7 @@ resource "aws_route_table_association" "public_subnet" {
 resource "aws_eks_cluster" "main" {
   name = "eks-cluster"
   role_arn = aws_iam_role.eks_cluster_role.arn
-  version = "1.21"
+  version = "1.30"
 
   vpc_config {
     subnet_ids = [aws_subnet.public.id]
