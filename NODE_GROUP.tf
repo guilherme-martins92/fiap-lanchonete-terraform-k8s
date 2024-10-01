@@ -41,11 +41,6 @@ resource "aws_eks_node_group" "main" {
   
   disk_size = 20
   
-  
-  labels = {
-    "eks.amazonaws.com/nodegroup" = "main-node-group"    
-  }
-
   tags = {
     Name = "eks-node-group"    
   }
