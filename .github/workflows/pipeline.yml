@@ -39,7 +39,11 @@ jobs:
 
     - name: Terraform Plan
       run: terraform plan
-
-    - name: Terraform Apply
+      
+    - name: Terraform Destroy
+      if: github.ref == 'refs/heads/main'  # Somente faz apply se estiver na branch 'main'
+      run: terraform destroy 
+      
+    - name: Terraform Apply    
       if: github.ref == 'refs/heads/main'  # Somente faz apply se estiver na branch 'main'
       run: terraform apply -auto-approve
