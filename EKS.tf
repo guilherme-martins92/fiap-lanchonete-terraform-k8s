@@ -6,13 +6,13 @@ resource "aws_eks_cluster" "main" {
 
   vpc_config {
     subnet_ids = [aws_subnet.public.id, aws_subnet.private.id]
+    security_group_ids = [aws_security_group.eks_cluster_sg.id]
   }
 
   tags = {
     Name = "eks-cluster"
   }
 }
-
 # Create the IAM role for the cluster
 resource "aws_iam_role" "eks_cluster_role" {
   name = "eks-cluster-role"
@@ -110,18 +110,6 @@ resource "aws_iam_policy" "eks_cluster_policy" {
       ],
       "Resource": "*"
     },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:DeleteObject",
-        "s3:ListBucket",
-        "s3:GetBucketLocation",
-        "s3:CreateBucket"
-      ],
-      "Resource": "*"
-    }
   ]
 }
 EOF

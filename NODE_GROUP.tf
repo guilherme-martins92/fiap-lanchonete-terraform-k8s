@@ -28,8 +28,9 @@ resource "aws_iam_role_policy_attachment" "eks_node_group_role_policy_attachment
 resource "aws_eks_node_group" "main" {
   cluster_name = aws_eks_cluster.main.name
   node_group_name = "eks-node-group"
-  subnet_ids = [aws_subnet.public.id,aws_subnet.private.id ]
+  subnet_ids = [aws_subnet.public.id, aws_subnet.private.id]
   node_role_arn = aws_iam_role.eks_node_group_role.arn
+  security_groups = [aws_security_group.eks_cluster_sg.id]
 
   scaling_config {
     desired_size = 1
@@ -38,10 +39,10 @@ resource "aws_eks_node_group" "main" {
   }
 
   instance_types = ["t3.medium"]
-  
+
   disk_size = 20
-  
+
   tags = {
-    Name = "eks-node-group"    
+    Name = "eks-node-group"
   }
 }
