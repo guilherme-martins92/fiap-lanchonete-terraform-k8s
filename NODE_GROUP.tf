@@ -28,7 +28,7 @@ resource "aws_iam_role_policy_attachment" "eks_node_group_role_policy_attachment
 resource "aws_eks_node_group" "main" {
   cluster_name = aws_eks_cluster.main.name
   node_group_name = "eks-node-group"
-  subnet_ids = [aws_subnet.public.id]
+  subnet_ids = [aws_subnet.public.id,aws_subnet.private.id ]
   node_role_arn = aws_iam_role.eks_node_group_role.arn
 
   scaling_config {
